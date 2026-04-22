@@ -1,13 +1,14 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const connectDb = require("./Config/Db");
-const dotenv = require("dotenv");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const sessionRoutes = require("./Sesstions&Cookies/SessionRoutes");
 
-dotenv.config();
+// ✅ Connect DB (after dotenv)
 connectDb();
 
 const app = express();
@@ -16,6 +17,7 @@ const app = express();
 app.set("etag", true);
 
 // middlewares
+app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
