@@ -81,7 +81,7 @@ router.get(`${API}/shrigar/order/get/api59/:id`,getSingleOrderController)
 router.put(`${API}/shrigar/order/update/api60/:id`,updateOrderStatusController)
 /* -------------------- Shregar API AUTH -------------------- */
 router.post(`${API}/shringar/User/registerUser/api61`,registerController)
-router.get(`${API}/shringar/User/GetAllUsersDetails/api62`,authMiddleware,getAllUserController)
+router.get(`${API}/shringar/User/GetAllUsersDetails/api62`,getAllUserController)
 router.get(`${API}/shringar/User/SingleUsers/api63/:id`,authMiddleware,getSingleUsersController)
 router.put(`${API}/shringar/User/UpdateUsers/api64/:id`,authMiddleware,UpdateUserController)
 router.delete(`${API}/shringar/User/DeleteUsers/api65/:id`,authMiddleware,DeleteUserController)
