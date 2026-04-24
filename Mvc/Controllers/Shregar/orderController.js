@@ -4,7 +4,7 @@ const sendOrderEmail = require("../../../utils/sendEmail");
 const createOrderController = async (req, res) => {
   try {
     console.log("🟡 ===== CREATE ORDER API HIT =====");
-
+    console.log("🟡 CREATE ORDER CONTROLLER HIT");
     const { userId, items, address, totalAmount, email } = req.body;
 
     console.log("📥 Incoming Data:");
@@ -44,7 +44,7 @@ const createOrderController = async (req, res) => {
     // 🔵 Call Email Function
     console.log("📧 Calling sendOrderEmail...");
     
-    sendOrderEmail(order, email)
+    await sendOrderEmail(order, email)
       .then(() => {
         console.log("✅ EMAIL SENT SUCCESSFULLY");
       })
