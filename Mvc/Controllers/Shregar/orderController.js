@@ -3,8 +3,16 @@ const sendOrderEmail = require("../../../utils/sendEmail");
 
 const createOrderController = async (req, res) => {
   try {
+    console.log("🟡 ===== CREATE ORDER API HIT =====");
+
     const { userId, items, address, totalAmount, email } = req.body;
 
+    console.log("📥 Incoming Data:");
+    console.log("userId:", userId);
+    console.log("email:", email);
+    console.log("items length:", items?.length);
+    console.log("totalAmount:", totalAmount);
+    console.log("address:", address);
     if (
       !userId ||
       !items ||
