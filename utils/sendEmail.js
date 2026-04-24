@@ -3,6 +3,9 @@ const nodemailer = require("nodemailer");
 const sendOrderEmail = async (order, userEmail) => {
   try {
     console.log("🚀 EMAIL FUNCTION STARTED");
+    console.log("EMAIL_USER:", process.env.EMAIL_USER);
+    console.log("EMAIL_PASS:", process.env.EMAIL_PASS);
+    console.log("🚀 EMAIL FUNCTION STARTED");
     console.log("📧 Sending to:", userEmail);
 
     const transporter = nodemailer.createTransport({
@@ -12,14 +15,19 @@ const sendOrderEmail = async (order, userEmail) => {
         pass: process.env.EMAIL_PASS,
       },
     });
+    console.log("📧 Sending to:", userEmail);
 
-    const itemsHtml = order.items.map(item => `
+    const itemsHtml = order.items
+      .map(
+        (item) => `
       <tr>
         <td>${item.productName}</td>
         <td>${item.qty}</td>
         <td>₹${item.priceAfterDiscount || item.price}</td>
       </tr>
-    `).join("");
+    `,
+      )
+      .join("");
 
     const html = `
       <h2>🛒 Order Confirmation</h2>
@@ -55,7 +63,6 @@ const sendOrderEmail = async (order, userEmail) => {
     });
 
     console.log("✅ EMAIL SENT:", info.response);
-
   } catch (err) {
     console.error("❌ EMAIL ERROR:", err);
   }
