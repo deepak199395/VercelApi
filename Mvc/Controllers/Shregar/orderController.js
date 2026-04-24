@@ -13,6 +13,8 @@ const createOrderController = async (req, res) => {
     console.log("items length:", items?.length);
     console.log("totalAmount:", totalAmount);
     console.log("address:", address);
+
+    // 🔴 Validation check
     if (
       !userId ||
       !items ||
@@ -21,12 +23,15 @@ const createOrderController = async (req, res) => {
       !totalAmount ||
       !email
     ) {
+      console.log("❌ VALIDATION FAILED");
+
       return res.status(400).json({
         success: false,
         message: "Missing order data",
       });
     }
 
+    // 🟢 Create Order
     const order = await Order.create({
       userId,
       items,
@@ -34,16 +39,29 @@ const createOrderController = async (req, res) => {
       totalAmount,
     });
 
-    //  SEND EMAIL (DON'T BLOCK RESPONSE)
-    sendOrderEmail(order, email);
+    console.log("📦 ORDER CREATED SUCCESSFULLY:", order._id);
+
+    // 🔵 Call Email Function
+    console.log("📧 Calling sendOrderEmail...");
+    
+    sendOrderEmail(order, email)
+      .then(() => {
+        console.log("✅ EMAIL SENT SUCCESSFULLY");
+      })
+      .catch((err) => {
+        console.error("❌ EMAIL FAILED:", err);
+      });
+
+    console.log("🟢 Sending API Response");
 
     res.status(201).json({
       success: true,
       message: "Order placed successfully",
       order,
     });
+
   } catch (error) {
-    console.error("ORDER ERROR:", error);
+    console.error("🔥 ORDER ERROR:", error);
 
     res.status(500).json({
       success: false,
