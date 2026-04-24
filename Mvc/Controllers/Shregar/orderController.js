@@ -1,14 +1,21 @@
 const Order = require("../../MongoModels/ShrigarModel/OrderModel");
+const sendOrderEmail = require("../../../utils/sendEmail");
 
 const createOrderController = async (req, res) => {
   try {
+    const { userId, items, address, totalAmount, email } = req.body;
 
-    const { userId, items, address, totalAmount } = req.body;
-
-    if (!userId || !items || items.length === 0 || !address || !totalAmount) {
+    if (
+      !userId ||
+      !items ||
+      items.length === 0 ||
+      !address ||
+      !totalAmount ||
+      !email
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Missing order data"
+        message: "Missing order data",
       });
     }
 
@@ -16,32 +23,29 @@ const createOrderController = async (req, res) => {
       userId,
       items,
       address,
-      totalAmount
+      totalAmount,
     });
+
+    //  SEND EMAIL (DON'T BLOCK RESPONSE)
+    sendOrderEmail(order, email);
 
     res.status(201).json({
       success: true,
       message: "Order placed successfully",
-      order
+      order,
     });
-
   } catch (error) {
-
     console.error("ORDER ERROR:", error);
 
     res.status(500).json({
       success: false,
-      message: error.message || "Internal Server Error"
+      message: error.message || "Internal Server Error",
     });
   }
 };
 
-
-
-
 const getMyOrdersController = async (req, res) => {
   try {
-
     const { userId } = req.query;
 
     let filter = {};
@@ -54,81 +58,74 @@ const getMyOrdersController = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      orders
+      orders,
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
 
 const getSingleOrderController = async (req, res) => {
   try {
-
-    const order = await Order.findById(req.params.id)
-      .populate("items.productId");
+    const order = await Order.findById(req.params.id).populate(
+      "items.productId",
+    );
 
     if (!order) {
       return res.status(404).json({
         success: false,
-        message: "Order not found"
+        message: "Order not found",
       });
     }
 
     res.json({
       success: true,
-      order
+      order,
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
 
 const updateOrderStatusController = async (req, res) => {
   try {
-
     const { status } = req.body;
 
     if (!status) {
       return res.status(400).json({
         success: false,
-        message: "Status is required"
+        message: "Status is required",
       });
     }
 
     const order = await Order.findByIdAndUpdate(
       req.params.id,
       { orderStatus: status },
-      { new: true }
+      { new: true },
     );
 
     if (!order) {
       return res.status(404).json({
         success: false,
-        message: "Order not found"
+        message: "Order not found",
       });
     }
 
     res.status(200).json({
       success: true,
       message: "Order status updated",
-      order
+      order,
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -137,5 +134,5 @@ module.exports = {
   createOrderController,
   getMyOrdersController,
   getSingleOrderController,
-  updateOrderStatusController
+  updateOrderStatusController,
 };

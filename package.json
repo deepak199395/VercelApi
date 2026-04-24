@@ -4,10 +4,10 @@
   "description": "this e-shopping app ",
   "main": "index.js",
   "type": "commonjs",
- "scripts": {
-  "dev": "nodemon server.js",
-  "start": "node server.js"
-},
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/deepak199395/shop999backend.git"
@@ -32,6 +32,7 @@
     "mongoose": "^8.12.1",
     "morgan": "^1.10.0",
     "mysql2": "^3.13.0",
+    "nodemailer": "^8.0.5",
     "nodemon": "^3.1.14",
     "sequelize": "^6.37.6",
     "sequelize-cli": "^6.6.2",
