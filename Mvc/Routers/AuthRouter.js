@@ -40,7 +40,7 @@ router.delete(`${API}/shringar/User/DeleteUsers/api65/:id`,authMiddleware,Delete
 router.post(`${API}/shringar/User/login/api66`,UserloginController)
 
                     //    Shringaars Analtics api
-router.post(`${API}/shringar/Screens/track/api67`,screenTrackController) 
+router.post(`${API}/shringar/Screens/enter/api67`,screenTrackController) 
 router.post(`${API}/shringar/Screens/exit/api68`,exitScreenController)
 router.get(`${API}/shringar/Screens/journey/api69`,getJourneyController)
 router.get(`${API}/shringar/Screens/current/api70`,getCurrentScreenController)
