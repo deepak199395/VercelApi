@@ -15,6 +15,7 @@ const { regiController, getUserController, getSingleUserController, loginControl
 const { registerController, getAllUserController, getSingleUsersController, UpdateUserController, DeleteUserController, UserloginController } = require("../Controllers/Shregar/AuthController");
 const { CreateProductController, getProductController } = require("../Controllers/Shregar/CollecProdController");
 const { createOrderController, getMyOrdersController, getSingleOrderController, updateOrderStatusController } = require("../Controllers/Shregar/orderController");
+const { screenTrackController, getJourneyController, exitScreenController, getCurrentScreenController } = require("../Controllers/Shregar/analyticsController");
 const router = express.Router();
 const API = "";   
 
@@ -38,4 +39,10 @@ router.put(`${API}/shringar/User/UpdateUsers/api64/:id`,authMiddleware,UpdateUse
 router.delete(`${API}/shringar/User/DeleteUsers/api65/:id`,authMiddleware,DeleteUserController)
 router.post(`${API}/shringar/User/login/api66`,UserloginController)
 
+                    //    Shringaars Analtics api
+router.post(`${API}/shringar/Screens/track/api67`,screenTrackController) 
+router.post(`${API}/shringar/Screens/exit/api68`,exitScreenController)
+router.get(`${API}/shringar/Screens/journey/api69`,getJourneyController)
+router.get(`${API}/shringar/Screens/current/api70`,getCurrentScreenController)
+                   
 module.exports = router;
