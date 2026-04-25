@@ -15,7 +15,7 @@ const { regiController, getUserController, getSingleUserController, loginControl
 const { registerController, getAllUserController, getSingleUsersController, UpdateUserController, DeleteUserController, UserloginController } = require("../Controllers/Shregar/AuthController");
 const { CreateProductController, getProductController } = require("../Controllers/Shregar/CollecProdController");
 const { createOrderController, getMyOrdersController, getSingleOrderController, updateOrderStatusController } = require("../Controllers/Shregar/orderController");
-const { screenTrackController, getJourneyController, exitScreenController, getCurrentScreenController } = require("../Controllers/Shregar/analyticsController");
+const { screenTrackController, getJourneyController, exitScreenController, getCurrentScreenController } = require("../Controllers/Shregar/AnalyticsController");
 const router = express.Router();
 const API = "";   
 
