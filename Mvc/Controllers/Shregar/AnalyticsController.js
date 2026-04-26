@@ -84,8 +84,8 @@ const getJourneyController = async (req, res) => {
   try {
     const { sessionId } = req.query;
 
-    const journey = await ScreenTrack.find({ sessionId }).sort({
-      startTime: 1,
+    const journey = await ScreenTrack.find().sort({
+      startTime: -1,
     });
 
     res.json({
