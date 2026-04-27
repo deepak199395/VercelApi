@@ -46,25 +46,41 @@ const exitScreenController = async (req, res) => {
   try {
     const { sessionId } = req.body;
 
-    const track = await ScreenTrack.findOne({
+    if (!sessionId) {
+      return res.status(400).json({
+        success: false,
+        message: "sessionId required",
+      });
+    }
+
+    const end = new Date();
+
+    // 🔥 Close ALL active screens (safer)
+    const tracks = await ScreenTrack.find({
       sessionId,
       endTime: null,
     });
 
-    if (track) {
-      const end = new Date();
-
+    for (let track of tracks) {
       track.endTime = end;
-      track.duration = (end - track.startTime) / 1000;
+
+      // ✅ STORE IN MILLISECONDS (BEST)
+      track.duration = end - track.startTime;
 
       await track.save();
     }
 
-    res.json({ success: true });
+    res.json({
+      success: true,
+      message: "Screen exited",
+    });
 
   } catch (error) {
     console.error("❌ EXIT ERROR:", error);
-    res.status(500).json({ success: false });
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 const getJourneyController = async (req, res) => {
@@ -120,10 +136,6 @@ const getCurrentScreenController = async (req, res) => {
     res.status(500).json({ success: false });
   }
 };
-
-/* ======================================================
-   📈 FUNNEL ANALYTICS (VERY POWERFUL 🚀)
-====================================================== */
 const getFunnelAnalytics = async (req, res) => {
   try {
     const data = await ScreenTrack.aggregate([
