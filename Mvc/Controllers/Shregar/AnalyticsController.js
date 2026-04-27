@@ -10,28 +10,33 @@ const screenTrackController = async (req, res) => {
       });
     }
 
-    // 🔴 Close previous screen
-    await ScreenTrack.updateMany(
-      { sessionId, endTime: null },
-      {
-        $set: {
-          endTime: new Date(),
-          duration:{
-               $subtract: [new Date(), "$startTime"],
-            }
-        },
-      }
-    );
+    const now = new Date();
 
-    // 🟢 Create new entry
+    /* 🔴 STEP 1: Close previous active screens (FIXED) */
+    const activeTracks = await ScreenTrack.find({
+      sessionId,
+      endTime: null,
+    });
+
+    for (let track of activeTracks) {
+      track.endTime = now;
+
+      // ✅ CALCULATE IN JS (milliseconds)
+      track.duration = now - track.startTime;
+
+      await track.save();
+    }
+
+    /* 🟢 STEP 2: Create new screen entry */
     const track = await ScreenTrack.create({
-      userId,
-      email,
-      phone,
+      userId: userId || null,
+      email: email || null,
+      phone: phone || null,
       sessionId,
       screen,
       screenKey,
-      productId,
+      productId: productId || null,
+      startTime: now,
     });
 
     res.json({
@@ -41,7 +46,10 @@ const screenTrackController = async (req, res) => {
 
   } catch (error) {
     console.error("❌ ENTER ERROR:", error);
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
@@ -58,7 +66,6 @@ const exitScreenController = async (req, res) => {
 
     const end = new Date();
 
-    // 🔥 Close ALL active screens (safer)
     const tracks = await ScreenTrack.find({
       sessionId,
       endTime: null,
@@ -67,7 +74,7 @@ const exitScreenController = async (req, res) => {
     for (let track of tracks) {
       track.endTime = end;
 
-      // ✅ STORE IN MILLISECONDS (BEST)
+      // ✅ milliseconds
       track.duration = end - track.startTime;
 
       await track.save();
@@ -86,6 +93,7 @@ const exitScreenController = async (req, res) => {
     });
   }
 };
+
 const getJourneyController = async (req, res) => {
   try {
     const data = await ScreenTrack.aggregate([
@@ -96,10 +104,11 @@ const getJourneyController = async (req, res) => {
           _id: "$sessionId",
           userId: { $first: "$userId" },
           email: { $first: "$email" },
+
           screens: {
             $push: {
               screen: "$screen",
-              duration: "$duration",
+              duration: "$duration", // ✅ now correct
               startTime: "$startTime",
             },
           },
@@ -121,7 +130,6 @@ const getJourneyController = async (req, res) => {
   }
 };
 
-
 const getCurrentScreenController = async (req, res) => {
   try {
     const activeUsers = await ScreenTrack.find({
@@ -139,13 +147,14 @@ const getCurrentScreenController = async (req, res) => {
     res.status(500).json({ success: false });
   }
 };
+
 const getFunnelAnalytics = async (req, res) => {
   try {
     const data = await ScreenTrack.aggregate([
       {
         $group: {
           _id: "$screen",
-          users: { $addToSet: "$sessionId" }, // ✅ unique users
+          users: { $addToSet: "$sessionId" },
         },
       },
       {
@@ -167,6 +176,7 @@ const getFunnelAnalytics = async (req, res) => {
     res.status(500).json({ success: false });
   }
 };
+
 
 module.exports = {
   screenTrackController,
