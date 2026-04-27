@@ -7,11 +7,9 @@ const { CreateCoroUser, CorouserregiGet, CorouserregiGetById, CorouserregiUpdate
 const { createExpessDiaryController, getExpessDiaryController } = require("../Controllers/OldCoro/ExpessDiaryController");
 const { CreateRegiUserController, FoxloginController } = require("../Controllers/FoxWebController/CoroAuthController");
 const { ExpenseController, getExpensseController, UpdateExpenssController, DeleteExpensesController } = require("../Controllers/FoxWebController/ExpensesController");
-const { DeleteMoodController } = require("../Controllers/RuhiController/AiAwairnesController");
 const {CreatNewPinController, getPinController, VerifyPinController}= require("../Controllers/FoxWebController/PinController");
 const { CreateCollectionController, getCollectionController } = require("../Controllers/Shregar/CollectionController");
 const { CreateCategoriesController, getCategoriesController } = require("../Controllers/Shregar/CategoriesController");
-const { regiController, getUserController, getSingleUserController, loginController } = require("../Controllers/RuhiController/JuhiAuthController");
 const { registerController, getAllUserController, getSingleUsersController, UpdateUserController, DeleteUserController, UserloginController } = require("../Controllers/Shregar/AuthController");
 const { CreateProductController, getProductController } = require("../Controllers/Shregar/CollecProdController");
 const { createOrderController, getMyOrdersController, getSingleOrderController, updateOrderStatusController } = require("../Controllers/Shregar/orderController");

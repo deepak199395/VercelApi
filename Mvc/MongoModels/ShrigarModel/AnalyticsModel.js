@@ -3,25 +3,28 @@ const mongoose = require("mongoose");
 const screenTrackSchema = new mongoose.Schema({
   userId: String,
 
+  email: String,
+  phone: String,
+
   sessionId: {
     type: String,
     required: true,
+    index: true,
   },
 
   screen: {
-    type: String, // "HOME", "PRODUCT", "CART"
+    type: String,
     required: true,
+    index: true,
   },
 
-  screenKey: {
-    type: String, // "isHome", "isProduct"
-  },
-
+  screenKey: String,
   productId: String,
 
   startTime: {
     type: Date,
     default: Date.now,
+    index: true,
   },
 
   endTime: {

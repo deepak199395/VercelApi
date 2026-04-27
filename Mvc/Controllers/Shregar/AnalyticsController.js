@@ -1,9 +1,7 @@
 const ScreenTrack = require("../../MongoModels/ShrigarModel/AnalyticsModel");
 const screenTrackController = async (req, res) => {
   try {
-    const { userId, sessionId, screen, screenKey, productId } = req.body;
-
-    console.log("📥 TRACK REQUEST:", req.body);
+    const { userId, email, phone, sessionId, screen, screenKey, productId } = req.body;
 
     if (!sessionId || !screen || !screenKey) {
       return res.status(400).json({
@@ -12,44 +10,35 @@ const screenTrackController = async (req, res) => {
       });
     }
 
-    /* 🔴 STEP 1: Close previous active screen */
+    // 🔴 Close previous screen
     await ScreenTrack.updateMany(
       { sessionId, endTime: null },
-      [
-        {
-          $set: {
-            endTime: new Date(),
-            duration: {
-              $divide: [
-                { $subtract: [new Date(), "$startTime"] },
-                1000,
-              ],
-            },
-          },
+      {
+        $set: {
+          endTime: new Date(),
         },
-      ]
+      }
     );
 
-    /* 🟢 STEP 2: Start new screen */
+    // 🟢 Create new entry
     const track = await ScreenTrack.create({
-      userId: userId || null,
+      userId,
+      email,
+      phone,
       sessionId,
       screen,
       screenKey,
-      productId: productId || null,
+      productId,
     });
 
     res.json({
       success: true,
-      message: "Entered screen",
       track,
     });
+
   } catch (error) {
     console.error("❌ ENTER ERROR:", error);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -63,65 +52,72 @@ const exitScreenController = async (req, res) => {
     });
 
     if (track) {
-      track.endTime = new Date();
-      track.duration = (track.endTime - track.startTime) / 1000;
+      const end = new Date();
+
+      track.endTime = end;
+      track.duration = (end - track.startTime) / 1000;
+
       await track.save();
     }
 
-    res.json({
-      success: true,
-      message: "Screen exited",
-    });
+    res.json({ success: true });
+
   } catch (error) {
     console.error("❌ EXIT ERROR:", error);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false });
   }
 };
 const getJourneyController = async (req, res) => {
   try {
-    const { sessionId } = req.query;
+    const data = await ScreenTrack.aggregate([
+      { $sort: { startTime: 1 } },
 
-    const journey = await ScreenTrack.find().sort({
-      startTime: -1,
-    });
+      {
+        $group: {
+          _id: "$sessionId",
+          userId: { $first: "$userId" },
+          email: { $first: "$email" },
+          screens: {
+            $push: {
+              screen: "$screen",
+              duration: "$duration",
+              startTime: "$startTime",
+            },
+          },
+        },
+      },
+
+      { $sort: { "_id": -1 } },
+      { $limit: 20 },
+    ]);
 
     res.json({
       success: true,
-      totalSteps: journey.length,
-      journey,
+      sessions: data,
     });
+
   } catch (error) {
     console.error("❌ JOURNEY ERROR:", error);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false });
   }
 };
 
 
 const getCurrentScreenController = async (req, res) => {
   try {
-    const { sessionId } = req.query;
-
-    const current = await ScreenTrack.findOne({
-      sessionId,
+    const activeUsers = await ScreenTrack.find({
       endTime: null,
     }).sort({ startTime: -1 });
 
     res.json({
       success: true,
-      currentScreen: current || null,
+      count: activeUsers.length,
+      users: activeUsers,
     });
+
   } catch (error) {
-    console.error("❌ CURRENT SCREEN ERROR:", error);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    console.error("❌ CURRENT ERROR:", error);
+    res.status(500).json({ success: false });
   }
 };
 
@@ -134,7 +130,13 @@ const getFunnelAnalytics = async (req, res) => {
       {
         $group: {
           _id: "$screen",
-          count: { $sum: 1 },
+          users: { $addToSet: "$sessionId" }, // ✅ unique users
+        },
+      },
+      {
+        $project: {
+          screen: "$_id",
+          count: { $size: "$users" },
         },
       },
       { $sort: { count: -1 } },
@@ -144,12 +146,10 @@ const getFunnelAnalytics = async (req, res) => {
       success: true,
       funnel: data,
     });
+
   } catch (error) {
     console.error("❌ FUNNEL ERROR:", error);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false });
   }
 };
 
