@@ -16,6 +16,9 @@ const screenTrackController = async (req, res) => {
       {
         $set: {
           endTime: new Date(),
+          duration:{
+               $subtract: [new Date(), "$startTime"],
+            }
         },
       }
     );
