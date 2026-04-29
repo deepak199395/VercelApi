@@ -14,6 +14,7 @@ const { registerController, getAllUserController, getSingleUsersController, Upda
 const { CreateProductController, getProductController } = require("../Controllers/Shregar/CollecProdController");
 const { createOrderController, getMyOrdersController, getSingleOrderController, updateOrderStatusController } = require("../Controllers/Shregar/orderController");
 const { screenTrackController, getJourneyController, exitScreenController, getCurrentScreenController } = require("../Controllers/Shregar/AnalyticsController");
+const { createNewArrivalController, getAllNewArrivalsController, getSingleNewArrivalController, updateNewArrivalController, deleteNewArrivalController } = require("../Controllers/Shregar/newArrivalController");
 const router = express.Router();
 const API = "";   
 
@@ -42,5 +43,12 @@ router.post(`${API}/shringar/Screens/enter/api67`,screenTrackController)
 router.post(`${API}/shringar/Screens/exit/api68`,exitScreenController)
 router.get(`${API}/shringar/Screens/journey/api69`,getJourneyController)
 router.get(`${API}/shringar/Screens/current/api70`,getCurrentScreenController)
-                   
+
+// 🔥 New Arrivals APIs
+// newArrivals api
+router.post(`${API}/shringar/createNewArrival/api71`, createNewArrivalController);
+router.get(`${API}/shringar/getAllNewArrivals/api72`, getAllNewArrivalsController);
+router.get(`${API}/shringar/getSingleNewArrival/api73/:id`, getSingleNewArrivalController);
+router.put(`${API}/shringar/updateNewArrival/api74/:id`, updateNewArrivalController);
+router.delete(`${API}/shringar/deleteNewArrival/api75/:id`, deleteNewArrivalController);
 module.exports = router;
