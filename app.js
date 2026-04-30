@@ -26,7 +26,11 @@ app.use((req, res, next) => {
 const allowedOrigins = [
   "https://shrigaars.com",
   "https://www.shrigaar.com",
-  "https://shrigaar-dashboard.web.app"
+  "https://shrigaar-dashboard.web.app",
+  "http://localhost:3000",
+  "http://localhost:5001",
+  
+
 ];
 
 app.use(cors({
