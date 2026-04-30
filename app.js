@@ -1,6 +1,5 @@
 // ✅ MUST be first
 require("dotenv").config();
-
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
@@ -8,12 +7,12 @@ const cookieParser = require("cookie-parser");
 const connectDb = require("./Config/Db");
 
 const app = express();
-
 // ✅ CORS FIX (IMPORTANT)
 app.use(cors({
-  origin: [
-    "https://shrigaar-dashboard.web.app",
-    "https://shringaars.com"
+   origin: [
+    "https://shringaars.com",
+    "https://www.shrigaar.com",
+    "https://shrigaar-dashboard.web.app"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
