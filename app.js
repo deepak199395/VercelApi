@@ -6,9 +6,8 @@ const cors = require("cors");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const connectDb = require("./Config/Db");
-
 const app = express();
-
+const getStatusPage = require("./utils/statusPage")
 
 // ✅ BLOCK direct access from vercel.app (optional but recommended)
 app.use((req, res, next) => {
@@ -55,7 +54,7 @@ app.use(cookieParser());
 
 // ✅ ROOT ROUTE
 app.get("/", (req, res) => {
-  res.send("Backend working 🚀");
+  res.send(getStatusPage());
 });
 
 
