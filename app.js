@@ -11,7 +11,10 @@ const app = express();
 
 // ✅ CORS FIX (IMPORTANT)
 app.use(cors({
-  origin: "https://shrigaar-dashboard.web.app",
+  origin: [
+    "https://shrigaar-dashboard.web.app",
+    "https://shringaars.com"
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
