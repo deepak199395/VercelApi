@@ -1,17 +1,22 @@
-// ✅ MUST be first line (load env variables)
+// ✅ MUST be first
 require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-const connectDb = require("./Config/Db");
-const session = require("express-session");
 const cookieParser = require("cookie-parser");
-const sessionRoutes = require("./Sesstions&Cookies/SessionRoutes");
+const connectDb = require("./Config/Db");
 
 const app = express();
 
+// ✅ CORS FIX (IMPORTANT)
+app.use(cors({
+  origin: "https://shrigaar-dashboard.web.app",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
 // ✅ Middlewares
-app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
@@ -22,7 +27,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1", require("./Mvc/Routers/AuthRouter"));
-app.use("/api/v1", sessionRoutes);
+app.use("/api/v1", require("./Sesstions&Cookies/SessionRoutes"));
 
 // ✅ Global Error Handler
 app.use((err, req, res, next) => {
@@ -34,18 +39,5 @@ app.use((err, req, res, next) => {
   });
 });
 
-// ✅ IMPORTANT: Connect DB before handling requests
-const startServer = async () => {
-  try {
-    await connectDb();
-    console.log("✅ MongoDB Connected Successfully");
-  } catch (error) {
-    console.error("❌ DB Connection Failed:", error);
-    process.exit(1);
-  }
-};
-
-startServer();
-
-// ✅ Export app (needed for Vercel)
-module.exports = app;
+// ✅ Export BOTH
+module.exports = { app, connectDb };
