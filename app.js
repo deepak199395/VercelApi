@@ -24,13 +24,11 @@ app.use((req, res, next) => {
 
 // ✅ CORS FIX (IMPROVED)
 const allowedOrigins = [
-  "https://shrigaars.com",
   "https://www.shrigaar.com",
   "https://shrigaar-dashboard.web.app",
   "http://localhost:3000",
   "http://localhost:5001",
-  
-
+  "https://shringaars.com"
 ];
 
 app.use(cors({
