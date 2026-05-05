@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const ArrivalsOrderorderSchema = new mongoose.Schema(
+const ArrivalsOrderSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -27,7 +27,7 @@ const ArrivalsOrderorderSchema = new mongoose.Schema(
 
     orderStatus: {
       type: String,
-      default: "Pending", 
+      default: "Pending",
     },
 
     paymentStatus: {
@@ -38,4 +38,4 @@ const ArrivalsOrderorderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("ArrivalsOrder", ArrivalsOrderorderSchema);
+module.exports = mongoose.model("ArrivalsOrder", ArrivalsOrderSchema);
