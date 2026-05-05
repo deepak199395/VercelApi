@@ -53,7 +53,7 @@ router.get(`${API}/shringar/getSingleNewArrival/api73/:id`, getSingleNewArrivalC
 router.put(`${API}/shringar/updateNewArrival/api74/:id`, updateNewArrivalController);
 router.delete(`${API}/shringar/deleteNewArrival/api75/:id`, deleteNewArrivalController);
 router.post(`${API}/shringar/createNewArrival-order/get/api76`,createArrivalsOrderController);
-router.get(`${API}/shringar/getArrivalsOrder/list/api77`,getArrivalsOrderController);
+router.get(`${API}/shringar/getArrivalsOrder/list/api77/:userId`,getArrivalsOrderController);
 
 router.post
 module.exports = router;
