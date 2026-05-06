@@ -1,61 +1,64 @@
 const mongoose = require("mongoose");
 
-const NewArrivalSchema = new mongoose.Schema(
+const ArrivalsOrderSchema = new mongoose.Schema(
   {
-    productName: {
-      type: String,
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
-      trim: true,
     },
 
-    // 🔥 Multiple images support
-    images: [
+    email: String,
+    phone: String,
+
+    // 🔥 ADDRESS (VERY IMPORTANT)
+    address: {
+      fullName: String,
+      phoneNumber: String,
+      addressLine: String,
+      city: String,
+      state: String,
+      pincode: String,
+      country: String,
+    },
+
+    // 🔥 MATCH FRONTEND CART STRUCTURE
+    items: [
       {
-        type: String,
-        required: true,
+        _id: mongoose.Schema.Types.ObjectId,
+        name: String,
+        image: String,
+        price: Number,
+        quantity: Number,
       },
     ],
 
-    description: {
+    totalAmount: {
+      type: Number,
+      required: true,
+    },
+
+    orderStatus: {
       type: String,
-      required: true,
-      trim: true,
+      default: "Pending",
     },
 
-    originalPrice: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-
-    discountPercentage: {
-      type: Number,
-      required: true,
-      min: 0,
-      max: 100,
-    },
-
-    priceAfterDiscount: {
-      type: Number,
-      default: 0,
-    },
-
-    inStock: {
-      type: Boolean,
-      default: true,
+    paymentStatus: {
+      type: String,
+      default: "Success",
     },
   },
   { timestamps: true }
 );
 
-// 🔥 Auto-calculate discounted price
-NewArrivalSchema.pre("save", function (next) {
-  if (this.originalPrice && this.discountPercentage !== undefined) {
-    this.priceAfterDiscount =
-      this.originalPrice -
-      (this.originalPrice * this.discountPercentage) / 100;
+// 🔥 AUTO TOTAL (optional but useful)
+ArrivalsOrderSchema.pre("save", function (next) {
+  if (this.items && this.items.length > 0) {
+    this.totalAmount = this.items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
   }
   next();
 });
 
-module.exports = mongoose.model("NewArrival", NewArrivalSchema);
+module.exports = mongoose.model("NewArrival", ArrivalsOrderSchema);

@@ -4,13 +4,13 @@ const ArrivalsOrder = require("../../MongoModels/ShrigarModel/ArrivalsOrderModel
 // 🔥 CREATE ORDER
 const createArrivalsOrderController = async (req, res) => {
   try {
-    const { userId, email, phone, items, totalAmount } = req.body;
+    const { userId, email, phone, items, address } = req.body;
 
     // ✅ validation
-    if (!userId || !totalAmount) {
+    if (!userId) {
       return res.status(400).json({
         success: false,
-        message: "userId and totalAmount are required",
+        message: "userId is required",
       });
     }
 
@@ -21,12 +21,21 @@ const createArrivalsOrderController = async (req, res) => {
       });
     }
 
+    if (!address || !address.addressLine) {
+      return res.status(400).json({
+        success: false,
+        message: "Address is required",
+      });
+    }
+
+    // 🔥 CREATE ORDER
     const newOrder = await ArrivalsOrder.create({
       userId,
       email,
       phone,
+      address,
       items,
-      totalAmount,
+      // ❌ no need to pass totalAmount (auto calculated)
     });
 
     res.status(201).json({
@@ -52,7 +61,6 @@ const getArrivalsOrderController = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    // ✅ validation
     if (!userId) {
       return res.status(400).json({
         success: false,
@@ -60,7 +68,6 @@ const getArrivalsOrderController = async (req, res) => {
       });
     }
 
-    // 🔥 FIXED HERE (use correct model)
     const orders = await ArrivalsOrder
       .find({ userId })
       .sort({ createdAt: -1 });
