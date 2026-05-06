@@ -22,7 +22,7 @@ const ArrivalsOrderSchema = new mongoose.Schema(
 
     totalAmount: {
       type: Number,
-      required: true,
+      default: 0,
     },
 
     orderStatus: {
@@ -35,7 +35,7 @@ const ArrivalsOrderSchema = new mongoose.Schema(
       default: "Success",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("ArrivalsOrder", ArrivalsOrderSchema);
