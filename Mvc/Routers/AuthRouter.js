@@ -16,9 +16,9 @@ const { createOrderController, getMyOrdersController, getSingleOrderController, 
 const { screenTrackController, getJourneyController, exitScreenController, getCurrentScreenController } = require("../Controllers/Shregar/AnalyticsController");
 const { createNewArrivalController, getAllNewArrivalsController, getSingleNewArrivalController, updateNewArrivalController, deleteNewArrivalController } = require("../Controllers/Shregar/newArrivalController");
 const { createArrivalsOrderController, getArrivalsOrderController } = require("../Controllers/Shregar/ArrivalsorderController");
+const { createUnderBudgetController, getUnderBudgetController, getSingleUnderBudgetController, updateUnderBudgetController, deleteUnderBudgetController } = require("../Controllers/Shregar/underBudgetController");
 const router = express.Router();
 const API = "";   
-
 
 /* -------------------- Shregar API -------------------- */
 router.post(`${API}/shrigar/collections/create/api51`,CreateCollectionController)
@@ -54,6 +54,13 @@ router.put(`${API}/shringar/updateNewArrival/api74/:id`, updateNewArrivalControl
 router.delete(`${API}/shringar/deleteNewArrival/api75/:id`, deleteNewArrivalController);
 router.post(`${API}/shringar/createNewArrival-order/get/api76`,createArrivalsOrderController);
 router.get(`${API}/shringar/getArrivalsOrder/list/api77/:userId`,getArrivalsOrderController);
+
+// 🔥 UnderBudged Api
+router.post(`${API}/shringar/underBudget/create/api78`,createUnderBudgetController)
+router.get(`${API}/shringar/underBudget/list/api79`,getUnderBudgetController)
+router.get(`${API}/shringar/underBudget/get/api80/:id`,getSingleUnderBudgetController)
+router.put(`${API}/shringar/underBudget/update/api81/:id`,updateUnderBudgetController)
+router.delete(`${API}/shringar/underBudget/delete/api82/:id`,deleteUnderBudgetController)
 
 router.post
 module.exports = router;
