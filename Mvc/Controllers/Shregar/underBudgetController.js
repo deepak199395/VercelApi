@@ -1,4 +1,4 @@
-const UnderBudget = require("../../../Mvc/MongoModels/ShrigarModel/underBudgetModel");
+const UnderBudget = require("../../MongoModels/ShrigarModel/underBudgetProductModel");
 const createUnderBudgetController = async (req, res) => {
   try {
     const { title, amount, image } = req.body;
