@@ -1,13 +1,6 @@
 const express = require("express");
 const authMiddleware = require("../../MiddleWere/authMiddleware")
 const apiKeyMiddleware= require("../../MiddleWere/apiKeyMiddleware")
-const {DueLoanController, getLoandeuDetailsController, updateLoanController} = require("../Controllers/OldCoro/LoanDueController");
-const { CreateExpessController, getExpessController, updateExpenssController, DeleteExpenssController } = require("../Controllers/OldCoro/expenseController");
-const { CreateCoroUser, CorouserregiGet, CorouserregiGetById, CorouserregiUpdate, CorouserregiDelete,coroLoginController } = require("../Controllers/OldCoro/CoroUserController");
-const { createExpessDiaryController, getExpessDiaryController } = require("../Controllers/OldCoro/ExpessDiaryController");
-const { CreateRegiUserController, FoxloginController } = require("../Controllers/FoxWebController/CoroAuthController");
-const { ExpenseController, getExpensseController, UpdateExpenssController, DeleteExpensesController } = require("../Controllers/FoxWebController/ExpensesController");
-const {CreatNewPinController, getPinController, VerifyPinController}= require("../Controllers/FoxWebController/PinController");
 const { CreateCollectionController, getCollectionController } = require("../Controllers/Shregar/CollectionController");
 const { CreateCategoriesController, getCategoriesController } = require("../Controllers/Shregar/CategoriesController");
 const { registerController, getAllUserController, getSingleUsersController, UpdateUserController, DeleteUserController, UserloginController } = require("../Controllers/Shregar/AuthController");
