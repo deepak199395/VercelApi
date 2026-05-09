@@ -31,7 +31,7 @@ const createUnderBudgetProductController = async (req, res) => {
       originalPrice,
       discountPercentage,
       imageUrl,
-      inStock,
+      inStock:inStock ?? true,
     });
     return res.status(201).json({
       success: true,
