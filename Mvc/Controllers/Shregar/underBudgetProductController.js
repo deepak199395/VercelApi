@@ -1,50 +1,57 @@
 const UnderBudgetProduct = require("../../../Mvc/MongoModels/ShrigarModel/underBudgetProductModel");
-const createUnderBudgetProductController = async (req, res) => {
-  try {
-    const {
-      UnderBudgetId,
-      productName,
-      description,
-      originalPrice,
-      discountPercentage,
-      imageUrl,
-    } = req.body;
-    // validations
-    if (
-      !UnderBudgetId ||
-      !productName ||
-      !description ||
-      !originalPrice ||
-      !discountPercentage ||
-      !imageUrl
-    ) {
-      return res.status(400).json({
+const createUnderBudgetProductController =
+  async (req, res) => {
+    try {
+      const {
+        UnderBudgetId,
+        productName,
+        description,
+        originalPrice,
+        discountPercentage,
+        imageUrl,
+        inStock,
+      } = req.body;
+
+      // Validation
+      if (
+        !UnderBudgetId ||
+        !productName ||
+        !description ||
+        !originalPrice ||
+        !discountPercentage ||
+        !imageUrl
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "All fields are required",
+        });
+      }
+
+      // Create Product
+      const newProduct =
+        await UnderBudgetProduct.create({
+          UnderBudgetId,
+          productName,
+          description,
+          originalPrice,
+          discountPercentage,
+          imageUrl,
+          inStock: inStock ?? true,
+        });
+
+      return res.status(201).json({
+        success: true,
+        message:
+          "Under Budget Product created successfully",
+        data: newProduct,
+      });
+    } catch (error) {
+      return res.status(500).json({
         success: false,
-        message: "All fields are required",
+        message: error.message,
       });
     }
-    // Create Product
-    const newProduct = await UnderBudgetProduct.create({
-      UnderBudgetId,
-      productName,
-      description,
-      originalPrice,
-      discountPercentage,
-      imageUrl,
-      inStock:inStock ?? true,
-    });
-    return res.status(201).json({
-      success: true,
-      message: "Under Budget Product created successfully",
-      data: newProduct,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+  };
 
 const getUnderBudgetProductController = async (req, res) => {
   try {
