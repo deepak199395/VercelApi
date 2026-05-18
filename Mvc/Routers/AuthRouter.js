@@ -11,6 +11,7 @@ const { createNewArrivalController, getAllNewArrivalsController, getSingleNewArr
 const { createArrivalsOrderController, getArrivalsOrderController } = require("../Controllers/Shregar/ArrivalsorderController");
 const { createUnderBudgetController, getUnderBudgetController, getSingleUnderBudgetController, updateUnderBudgetController, deleteUnderBudgetController } = require("../Controllers/Shregar/underBudgetController");
 const { createUnderBudgetProductController, getUnderBudgetProductController, deleteUnderBudgetProductController } = require("../Controllers/Shregar/underBudgetProductController");
+const { CreateStaffController, GetAllStaffController, GetStaffByCategoryController, DeleteStaffController, UpdateStaffController } = require("../Controllers/Shregar/StaffController");
 const router = express.Router();
 const API = "";   
 
@@ -56,5 +57,11 @@ router.post(`${API}/shringar/underBudgetProduct/create/api83`,createUnderBudgetP
 router.get(`${API}/shringar/underBudgetProduct/list/api84/:id`,getUnderBudgetProductController)
 router.delete(`${API}/shringar/underBudgetProduct/delete/api85/:id`,deleteUnderBudgetProductController)
 
-router.post
+// staff managament //
+router.post(`${API}/shringar/staff/create/api86`,CreateStaffController);
+router.get(`${API}/shringar/staff/list/api87`,GetAllStaffController);
+router.get(`${API}/shringar/staff/category/api88/:category`,GetStaffByCategoryController);
+router.put(`${API}/shringar/staff/update/api89/:id`,UpdateStaffController);
+router.delete(`${API}/shringar/staff/delete/api90/:id`,DeleteStaffController);
+
 module.exports = router;
